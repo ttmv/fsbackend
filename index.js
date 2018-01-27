@@ -1,6 +1,10 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+
+app.use(bodyParser.json())
+app.use(morgan('tiny'))
 
 let persons = [
     {
@@ -40,11 +44,11 @@ let persons = [
     }
 ]
 
-app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
     res.send('<div></div>')
 })
+
 
 app.get('/info', (req, res) => {
     let infotxt = `Puhelinluettelossa on ${persons.length} henkilön tiedot.`
@@ -52,9 +56,11 @@ app.get('/info', (req, res) => {
     res.send(`<div><p>${infotxt}</p><p> ${Date()} </p></div>`)
 })
 
+
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
+
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
@@ -64,12 +70,14 @@ app.get('/api/persons/:id', (req, res) => {
     else res.status(404).end()
 })
 
+
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(p => p.id !== id)
   
     res.status(204).end()
 })
+
 
 app.post('/api/persons/', (req, res) => {
     const person = req.body
