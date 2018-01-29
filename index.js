@@ -91,27 +91,40 @@ app.delete('/api/persons/:id', (req, res) => {
 
 
 app.post('/api/persons/', (req, res) => {
-    const person = req.body
-    person.id = Math.ceil(Math.random()*200000)
+    //const person = req.body
+    //person.id = Math.ceil(Math.random()*200000)
+    const p = req.body
 
-    if(!person.name) {
+    if(!p.name) {
         return res.status(400)
             .json({error: 'name missing'})        
     }
 
-    if(!person.number) {
+    if(!p.number) {
         return res.status(400)
             .json({error: 'number missing'})        
     }
 
+    const person = new Person({
+        name: p.name,
+        number: p.number
+    })
+
+    person.save().then(saved => {
+        res.json(Person.format(saved))
+    }).catch(err => {
+        console.log(err)
+    })
+    /*
     if(persons.find(p => p.name === person.name)) {
         return res.status(400)
-            .json({error: 'name must be unique'})
     }
+            .json({error: 'name must be unique'})
 
     persons = persons.concat(person)
 
     res.json(person)
+    */
 })
   
 const PORT = process.env.PORT || 3001
