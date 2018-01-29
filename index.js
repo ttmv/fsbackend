@@ -67,10 +67,9 @@ app.get('/info', (req, res) => {
 
 
 app.get('/api/persons', (req, res) => {
-    //res.json(persons)
     Person.find({}).then(persons => {
-        res.json(persons)
-    })
+        res.json(persons.map(Person.format))
+    }).catch(err => {console.log(err)})
 })
 
 
@@ -117,6 +116,6 @@ app.post('/api/persons/', (req, res) => {
   
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
 
