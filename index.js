@@ -16,6 +16,7 @@ morgan.token('body', function (req, res) {
 
 app.use(morgan(':method :url :body :status :res[content-length] - :response-time ms'))
 
+/*
 let persons = [
     {
         "name": "Arto Hellas",
@@ -53,7 +54,7 @@ let persons = [
         "id": 10
     }
 ]
-
+*/
 
 app.get('/', (req, res) => {
     res.send('<div></div>')
@@ -101,19 +102,17 @@ app.put('/api/persons/:id', (req, res) => {
     }
     
     Person.findByIdAndUpdate(req.params.id, person, { new: true })
-    .then(updated => {
-        res.json(Person.format(updated))
-    }).catch(err => {
-        console.log(err)
-        res.status(400).send({ error: err })
-    })
+        .then(updated => {
+            res.json(Person.format(updated))
+        }).catch(err => {
+            res.status(400).send({ error: err })
+        })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
     Person.findByIdAndRemove(req.params.id).then(result => {
         res.status(204).end()
     }).catch(err => {
-        console.log(err)
         res.status(400).send({ error: err })
     })
 })
@@ -148,7 +147,6 @@ app.post('/api/persons/', (req, res) => {
     }).then(saved => {
         res.json(Person.format(saved))
     }).catch(err => {
-        console.log(err)
         res.status(400).send({error: err})
     })
 })
