@@ -83,10 +83,12 @@ app.get('/api/persons/:id', (req, res) => {
 
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(p => p.id !== id)
-  
-    res.status(204).end()
+    Person.findByIdAndRemove(req.params.id).then(result => {
+        res.status(204).end()
+    }).catch(err => {
+        console.log(err)
+        res.status(400).send({ error: err })
+    })
 })
 
 
@@ -115,16 +117,6 @@ app.post('/api/persons/', (req, res) => {
     }).catch(err => {
         console.log(err)
     })
-    /*
-    if(persons.find(p => p.name === person.name)) {
-        return res.status(400)
-    }
-            .json({error: 'name must be unique'})
-
-    persons = persons.concat(person)
-
-    res.json(person)
-    */
 })
   
 const PORT = process.env.PORT || 3001
