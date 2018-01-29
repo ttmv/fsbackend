@@ -60,10 +60,16 @@ app.get('/', (req, res) => {
 
 
 app.get('/info', (req, res) => {
-    let infotxt = `Puhelinluettelossa on ${persons.length} henkilön tiedot.`
-    
-    res.send(`<div><p>${infotxt}</p><p> ${Date()} </p></div>`)
+    Person.find({}).then(persons => {
+        let infotxt = `Puhelinluettelossa on ${persons.length} henkilön tiedot.`
+        res.send(`<div><p>${infotxt}</p><p> ${Date()} </p></div>`)
+    }).catch(err => {
+        console.log(err)
+    })
 })
+    
+    
+    
 
 
 app.get('/api/persons', (req, res) => {
@@ -82,7 +88,7 @@ app.get('/api/persons/:id', (req, res) => {
                 res.status(404).end()
             }
         }).catch(err => {
-            console.log(err)
+            //console.log(err)
             res.status(400).send({error: err})
         })
 })
