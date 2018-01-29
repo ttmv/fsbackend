@@ -68,10 +68,6 @@ app.get('/info', (req, res) => {
     })
 })
     
-    
-    
-
-
 app.get('/api/persons', (req, res) => {
     Person.find({}).then(persons => {
         res.json(persons.map(Person.format))
@@ -133,15 +129,21 @@ app.post('/api/persons/', (req, res) => {
             .json({error: 'number missing'})        
     }
 
-    const person = new Person({
-        name: p.name,
-        number: p.number
-    })
+    Person.find({name: p.name}).then(result => {
+        if(result.length > 0) {
+            res.status(400).json({error: 'person exists'})
+        } else {
+            const person = new Person({
+                name: p.name,
+                number: p.number
+            })
 
-    person.save().then(saved => {
+            return person.save()
+        }
+    }).then(saved => {
         res.json(Person.format(saved))
     }).catch(err => {
-        console.log(err)
+        console.log(err)        
     })
 })
   
