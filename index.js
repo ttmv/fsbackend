@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
 
+
 app.use(bodyParser.json())
 app.use(cors())
 app.use(express.static('build'))
@@ -65,13 +66,17 @@ app.get('/info', (req, res) => {
         res.send(`<div><p>${infotxt}</p><p> ${Date()} </p></div>`)
     }).catch(err => {
         console.log(err)
+        res.status(400).send({error: err})
     })
 })
     
 app.get('/api/persons', (req, res) => {
     Person.find({}).then(persons => {
         res.json(persons.map(Person.format))
-    }).catch(err => {console.log(err)})
+    }).catch(err => {
+        console.log(err)
+        res.status(400).send({error: err})
+    })
 })
 
 
@@ -143,7 +148,8 @@ app.post('/api/persons/', (req, res) => {
     }).then(saved => {
         res.json(Person.format(saved))
     }).catch(err => {
-        console.log(err)        
+        console.log(err)
+        res.status(400).send({error: err})
     })
 })
   
